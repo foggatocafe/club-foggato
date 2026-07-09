@@ -1,300 +1,624 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club Foggato - Tarjeta de Lealtad</title>
-    <!-- Iconos de FontAwesome para las tazas y estrellas -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#11100e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>Foggato Café · Club de Lealtad</title>
+  <style>
+    :root {
+      --black: #11100e;
+      --black-2: #1c1914;
+      --panel: #231c15;
+      --gold: #d69b48;
+      --gold-2: #f3c778;
+      --cream: #f5e7d0;
+      --muted: #bca98e;
+      --red: #8c2f25;
+      --green: #9fbe8a;
+      --line: rgba(246,222,184,.16);
+      --glass: rgba(255,255,255,.06);
+      --shadow: 0 26px 80px rgba(0,0,0,.48);
+    }
     
-    <style>
-        /* DISEÑO RÚSTICO Y ELEGANTE PARA FOGGATO CAFÉ */
-        body {
-            background-color: #121212;
-            color: #f5f2eb;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        .card-container {
-            background-color: #1a1a1a;
-            border: 2px solid #8B5A2B; /* Tono café bronce */
-            border-radius: 15px;
-            padding: 25px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-            text-align: center;
-        }
-
-        .card-header {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 15px;
-        }
-
-        .brand-title {
-            color: #D4AF37; /* Dorado elegante */
-            font-size: 24px;
-            letter-spacing: 2px;
-            margin: 0 0 5px 0;
-        }
-
-        .brand-subtitle {
-            color: #a09884;
-            font-size: 14px;
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        .status-box {
-            background-color: #262626;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #3d3d3d;
-        }
-
-        .status-box p {
-            margin: 5px 0;
-            font-size: 16px;
-        }
-
-        #stamp-count {
-            color: #D4AF37;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .reward-alert {
-            color: #8B5A2B;
-            font-size: 13px;
-            font-style: italic;
-        }
-
-        /* CUADRÍCULA DE SELLOS */
-        .stamps-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .stamp-slot {
-            background-color: #262626;
-            border: 2px dashed #444;
-            border-radius: 50%;
-            aspect-ratio: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        /* Sello cuando ya está activo (Café con logo dorado) */
-        .stamp-slot.active {
-            background-color: #8B5A2B;
-            border-style: solid;
-            border-color: #D4AF37;
-            box-shadow: 0 0 10px rgba(212,175,55,0.3);
-        }
-
-        .stamp-slot i {
-            color: #444;
-            font-size: 18px;
-        }
-
-        .stamp-slot.active i {
-            color: #D4AF37;
-            animation: popIn 0.3s ease;
-        }
-
-        /* El premio final (Espacio 10) */
-        .stamp-slot.reward-slot {
-            border-color: #D4AF37;
-        }
-        
-        .stamp-slot.reward-slot i {
-            color: #554422;
-        }
-
-        .stamp-slot.reward-slot.active i {
-            color: #fff;
-            animation: pulse 1.5s infinite;
-        }
-
-        .card-footer {
-            border-top: 1px solid #333;
-            padding-top: 15px;
-            font-size: 12px;
-            color: #a09884;
-        }
-
-        .card-footer p {
-            margin: 6px 0;
-        }
-
-        /* BOTONES */
-        .btn-primary {
-            background-color: #8B5A2B;
-            color: #f5f2eb;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            transition: background 0.2s;
-        }
-
-        .btn-primary:hover {
-            background-color: #A06D3B;
-        }
-
-        .btn-secondary {
-            background-color: transparent;
-            color: #888;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 11px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.2s;
-        }
-
-        .btn-secondary:hover {
-            color: #f5f2eb;
-            border-color: #666;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
-        }
-    </style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body { 
+      width: 100%; 
+      min-height: 100%; 
+      background: radial-gradient(circle at 50% -10%, rgba(214,155,72,.24), transparent 38%), linear-gradient(180deg, #211b15 0%, #0d0c0a 100%);
+      color: var(--cream); 
+      font-family: Georgia, "Times New Roman", serif; 
+      -webkit-font-smoothing: antialiased; 
+    }
+    
+    body { display: flex; justify-content: center; overflow-x: hidden; }
+    button, input { font: inherit; }
+    button { border: 0; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    
+    .app { 
+      width: 100%; 
+      max-width: 440px; 
+      min-height: 100vh; 
+      position: relative; 
+      overflow: hidden; 
+      background: radial-gradient(circle at 12% 8%, rgba(140,47,37,.18), transparent 28%), radial-gradient(circle at 92% 0%, rgba(214,155,72,.18), transparent 32%), linear-gradient(180deg, #1b1713, #0e0d0b); 
+    }
+    
+    .app:before { 
+      content: ""; 
+      position: absolute; 
+      inset: 0; 
+      pointer-events: none; 
+      opacity: .18; 
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E"); 
+    }
+    
+    .screen { 
+      position: relative; 
+      z-index: 1; 
+      display: none; 
+      min-height: 100vh; 
+      padding: 18px 18px calc(110px + env(safe-area-inset-bottom)); 
+      animation: rise .28s ease both; 
+    }
+    
+    .screen.active { display: block; }
+    @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .logo-hero { width: 168px; height: 168px; border-radius: 50%; object-fit: cover; display: block; margin: 20px auto 18px; box-shadow: 0 24px 70px rgba(0,0,0,.55); border: 1px solid rgba(214,155,72,.34); }
+    .logo-mini { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; border: 1px solid rgba(214,155,72,.42); box-shadow: 0 10px 26px rgba(0,0,0,.38); flex: 0 0 auto; }
+    
+    .eyebrow { font-family: Verdana, Geneva, sans-serif; font-size: 11px; text-align: center; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-2); margin-bottom: 8px; }
+    h1 { font-size: 39px; line-height: .94; text-align: center; letter-spacing: -.05em; font-weight: 500; color: #fff1d8; margin-bottom: 10px; }
+    h2 { font-size: 26px; line-height: 1; letter-spacing: -.035em; font-weight: 500; color: #fff1d8; }
+    h3 { font-size: 18px; line-height: 1.1; font-weight: 600; color: #fff1d8; }
+    p { font-family: Verdana, Geneva, sans-serif; font-size: 13px; line-height: 1.48; color: rgba(245,231,208,.72); }
+    .lead { max-width: 330px; margin: 0 auto 22px; text-align: center; }
+    
+    .card { 
+      position: relative; 
+      border-radius: 28px; 
+      border: 1px solid var(--line); 
+      background: linear-gradient(150deg, rgba(255,255,255,.09), rgba(255,255,255,.035)); 
+      box-shadow: var(--shadow); 
+      overflow: hidden; 
+      backdrop-filter: blur(18px); 
+    }
+    
+    .card:before { content: ""; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(214,155,72,.15), transparent 42%, rgba(140,47,37,.12)); pointer-events: none; }
+    .card-inner { position: relative; padding: 18px; }
+    
+    .field { width: 100%; height: 54px; margin-bottom: 10px; border-radius: 18px; border: 1px solid rgba(246,222,184,.2); background: rgba(0,0,0,.24); outline: none; color: #fff5e5; padding: 0 15px; font-family: Verdana, Geneva, sans-serif; font-size: 15px; }
+    .field::placeholder { color: rgba(245,231,208,.42); }
+    .field:focus { border-color: rgba(214,155,72,.72); box-shadow: 0 0 0 4px rgba(214,155,72,.1); }
+    
+    .btn { width: 100%; min-height: 54px; border-radius: 18px; padding: 0 18px; display: flex; align-items: center; justify-content: center; gap: 8px; font-family: Verdana, Geneva, sans-serif; font-size: 14px; font-weight: 700; letter-spacing: .02em; transition: transform .16s ease, filter .16s ease; }
+    .btn:active { transform: scale(.985); }
+    .btn-primary { background: linear-gradient(135deg, var(--gold-2), var(--gold)); color: #21140b; box-shadow: 0 16px 36px rgba(214,155,72,.28); }
+    .btn-secondary { background: rgba(255,255,255,.07); border: 1px solid rgba(246,222,184,.16); color: var(--cream); }
+    .btn-ghost { background: transparent; color: var(--muted); min-height: 38px; font-size: 12px; text-decoration: underline; text-underline-offset: 4px; margin-top: 8px; width: 100%; text-align: center; }
+    
+    .stack { display: grid; gap: 10px; }
+    .error { min-height: 18px; text-align: center; font-family: Verdana, Geneva, sans-serif; font-size: 12px; color: #ffc0b2; margin: 2px 0 8px; }
+    .fine { font-size: 11px; text-align: center; color: rgba(245,231,208,.5); margin-top: 14px; }
+    
+    .topbar { height: 66px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .brand-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand-row strong { display: block; font-size: 15px; color: #fff1d8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brand-row small { display: block; font-family: Verdana, Geneva, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .pill { height: 36px; border-radius: 99px; background: rgba(255,255,255,.07); border: 1px solid rgba(246,222,184,.14); padding: 0 12px; display: flex; align-items: center; font-family: Verdana, Geneva, sans-serif; font-size: 11px; color: var(--gold-2); white-space: nowrap; }
+    
+    .hero-card { 
+      border-radius: 32px; padding: 19px; margin-bottom: 14px; 
+      background: radial-gradient(circle at 82% 0%, rgba(214,155,72,.22), transparent 42%), linear-gradient(145deg, rgba(54,38,27,.95), rgba(18,14,11,.97)); 
+      border: 1px solid rgba(214,155,72,.27); box-shadow: 0 24px 76px rgba(0,0,0,.46); overflow: hidden; position: relative; 
+    }
+    .hero-card:after { content: ""; position: absolute; right: -74px; top: -86px; width: 188px; height: 188px; border-radius: 50%; background: radial-gradient(circle, rgba(214,155,72,.18), transparent 66%); }
+    .hello { position: relative; z-index: 1; font-family: Verdana, Geneva, sans-serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .stamp-count { position: relative; z-index: 1; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+    .big-number { font-size: 68px; line-height: .82; letter-spacing: -.09em; color: #fff3dd; }
+    .big-number small { display: block; margin-top: 10px; font-family: Verdana, Geneva, sans-serif; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    .reward-badge { min-width: 116px; border-radius: 19px; background: rgba(0,0,0,.24); border: 1px solid rgba(214,155,72,.25); padding: 12px; text-align: right; }
+    .reward-badge b { display: block; font-size: 16px; color: var(--gold-2); }
+    .reward-badge span { display: block; font-family: Verdana, Geneva, sans-serif; font-size: 10px; line-height: 1.25; color: rgba(245,231,208,.62); }
+    
+    .bar { position: relative; z-index: 1; height: 10px; border-radius: 99px; background: rgba(0,0,0,.36); border: 1px solid rgba(255,255,255,.08); overflow: hidden; }
+    .bar-fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--gold-2), var(--green)); transition: width .45s ease; }
+    .bar-meta { position: relative; z-index: 1; display: flex; justify-content: space-between; margin-top: 8px; font-family: Verdana, Geneva, sans-serif; font-size: 11px; color: rgba(245,231,208,.62); }
+    
+    .stamp-card { margin-bottom: 14px; padding: 16px; border-radius: 30px; background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.032)); border: 1px solid var(--line); box-shadow: 0 22px 70px rgba(0,0,0,.34); }
+    .stamp-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 14px; }
+    .stamp-head span { font-family: Verdana, Geneva, sans-serif; font-size: 11px; color: var(--muted); }
+    .stamps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .stamp { aspect-ratio: 1; border-radius: 18px; display: grid; place-items: center; background: rgba(0,0,0,.25); border: 1px dashed rgba(246,222,184,.22); position: relative; overflow: hidden; color: rgba(245,231,208,.32); }
+    .stamp:before { content: ""; width: 42%; height: 42%; border-radius: 50%; border: 2px solid currentColor; opacity: .65; }
+    .stamp.filled { border-style: solid; border-color: rgba(214,155,72,.68); background: radial-gradient(circle at 35% 28%, rgba(255,255,255,.16), transparent 22%), linear-gradient(145deg, rgba(214,155,72,.38), rgba(140,47,37,.2)); box-shadow: 0 0 22px rgba(214,155,72,.18); color: #ffdca2; }
+    .stamp.filled:before { display: none; }
+    
+    .stamp-icon { position: relative; width: 46px; height: 46px; display: block; filter: drop-shadow(0 8px 10px rgba(0,0,0,.28)); }
+    .stamp-icon .steam { position: absolute; top: 0; width: 3px; height: 11px; border-radius: 99px; background: rgba(255,236,198,.82); transform: rotate(12deg); animation: steam 1.8s ease-in-out infinite; }
+    .stamp-icon .steam.s1 { left: 14px; animation-delay: .1s; }
+    .stamp-icon .steam.s2 { left: 22px; height: 13px; animation-delay: .35s; }
+    .stamp-icon .steam.s3 { left: 30px; animation-delay: .6s; }
+    @keyframes steam { 0%,100% { opacity: .42; transform: translateY(2px) rotate(10deg); } 50% { opacity: .9; transform: translateY(-2px) rotate(-7deg); } }
+    
+    .stamp-icon .cup { position: absolute; left: 7px; bottom: 10px; width: 29px; height: 22px; border-radius: 4px 4px 13px 13px; background: linear-gradient(145deg, #f7c97c, #b8702e); border: 2px solid #28170e; }
+    .stamp-icon .cup:before { content: ""; position: absolute; left: 4px; right: 4px; top: 4px; height: 6px; border-radius: 50%; background: linear-gradient(90deg, #2b150c, #5c2f18); }
+    .stamp-icon .handle { position: absolute; right: 2px; bottom: 15px; width: 13px; height: 13px; border: 3px solid #e4aa56; border-left: 0; border-radius: 0 9px 9px 0; }
+    .stamp-icon .saucer { position: absolute; left: 6px; right: 5px; bottom: 5px; height: 5px; border-radius: 50%; background: rgba(255,229,170,.72); }
+    .stamp-icon.espresso .steam { height: 9px; }
+    .stamp-icon.espresso .shot { position: absolute; left: 10px; bottom: 8px; width: 27px; height: 27px; clip-path: polygon(12% 0, 88% 0, 75% 100%, 25% 100%); border-radius: 5px; background: linear-gradient(180deg, #f5d18b 0 24%, #4a2412 25% 70%, #1e0f09 71%); border: 2px solid #2a170c; }
+    .stamp-icon.espresso .shot:after { content: ""; position: absolute; left: 5px; right: 5px; top: 5px; height: 4px; border-radius: 50%; background: #2a130a; box-shadow: 0 7px 0 rgba(110,55,25,.75); }
+    .stamp-icon.affogato .glass { position: absolute; left: 10px; bottom: 5px; width: 28px; height: 31px; clip-path: polygon(8% 0, 92% 0, 78% 100%, 22% 100%); border-radius: 5px; background: linear-gradient(180deg, rgba(255,244,218,.96) 0 34%, #7a3d1f 35% 65%, #2d160d 66%); border: 2px solid #2a170c; }
+    .stamp-icon.affogato .scoop { position: absolute; left: 12px; top: 2px; width: 24px; height: 22px; border-radius: 50% 50% 44% 44%; background: radial-gradient(circle at 35% 28%, #fff8e9 0 20%, #f2c979 21% 100%); border: 2px solid #2a170c; z-index: 2; }
+    .stamp-icon.affogato .drip { position: absolute; left: 23px; top: 17px; width: 6px; height: 14px; border-radius: 99px; background: #4a2412; z-index: 3; }
+    
+    .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .action-card { min-height: 104px; border-radius: 22px; background: rgba(255,255,255,.07); border: 1px solid rgba(246,222,184,.14); padding: 14px; text-align: left; }
+    .action-card b { display: block; font-size: 15px; color: #fff0d5; margin-bottom: 6px; }
+    .action-card span { display: block; font-family: Verdana, Geneva, sans-serif; font-size: 11px; line-height: 1.35; color: rgba(245,231,208,.62); }
+    
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin: 20px 2px 10px; }
+    .section-head button { background: transparent; font-family: Verdana, Geneva, sans-serif; font-size: 11px; color: var(--gold-2); }
+    
+    .reward-card, .rule-card { border-radius: 24px; background: rgba(0,0,0,.21); border: 1px solid rgba(246,222,184,.13); padding: 15px; margin-bottom: 10px; }
+    .reward-card.featured { background: linear-gradient(145deg, rgba(214,155,72,.18), rgba(0,0,0,.18)); border-color: rgba(214,155,72,.38); }
+    .reward-card .top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .icon { width: 48px; height: 48px; border-radius: 17px; background: rgba(214,155,72,.16); border: 1px solid rgba(214,155,72,.28); display: grid; place-items: center; font-size: 24px; }
+    .reward-card b, .rule-card b { display: block; font-size: 16px; color: #fff0d5; }
+    .reward-card span, .rule-card span { display: block; font-family: Verdana, Geneva, sans-serif; font-size: 12px; line-height: 1.42; color: rgba(245,231,208,.66); }
+    
+    .qr-wrap { margin: 18px auto; width: min(306px, 100%); border-radius: 30px; background: #fff8eb; padding: 19px; box-shadow: 0 24px 76px rgba(0,0,0,.45); }
+    .qr-grid { width: 100%; aspect-ratio: 1; display: grid; grid-template-columns: repeat(21, 1fr); grid-template-rows: repeat(21, 1fr); gap: 2px; background: #fff8eb; }
+    .qr-cell { border-radius: 2px; }
+    .qr-cell.on { background: #18110d; }
+    .qr-label { text-align: center; color: #18110d; font-family: Verdana, Geneva, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: .1em; margin-top: 12px; }
+    
+    .code-box { border-radius: 20px; border: 1px dashed rgba(214,155,72,.42); background: rgba(0,0,0,.2); padding: 14px; text-align: center; margin-top: 14px; }
+    .code-box small { display: block; font-family: Verdana, Geneva, sans-serif; font-size: 10px; color: var(--muted); letter-spacing: .16em; text-transform: uppercase; margin-bottom: 6px; }
+    .code-box b { font-size: 24px; letter-spacing: .08em; color: #fff1d8; }
+    
+    .admin-panel { display: grid; gap: 10px; margin-top: 14px; }
+    .admin-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .admin-row .btn { min-height: 48px; border-radius: 16px; }
+    .micro { font-family: Verdana, Geneva, sans-serif; font-size: 10px; color: rgba(245,231,208,.5); line-height: 1.42; text-align: center; }
+    
+    .bottom-nav { 
+      position: fixed; z-index: 20; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom)); transform: translateX(-50%); 
+      width: min(404px, calc(100% - 24px)); height: 70px; border-radius: 26px; background: rgba(18,14,11,.86); 
+      border: 1px solid rgba(246,222,184,.16); box-shadow: 0 18px 56px rgba(0,0,0,.45); backdrop-filter: blur(18px); 
+      display: none; grid-template-columns: repeat(3, 1fr); padding: 8px; 
+    }
+    .bottom-nav.active { display: grid; }
+    .nav-btn { border-radius: 20px; background: transparent; color: rgba(245,231,208,.52); font-family: Verdana, Geneva, sans-serif; font-size: 10px; display: grid; place-items: center; gap: 3px; }
+    .nav-btn b { font-family: Georgia, "Times New Roman", serif; font-size: 18px; line-height: 1; }
+    .nav-btn.active { background: linear-gradient(145deg, rgba(214,155,72,.18), rgba(255,255,255,.06)); color: var(--gold-2); }
+    
+    .modal { position: fixed; z-index: 30; inset: 0; background: rgba(7,6,5,.78); display: none; align-items: flex-end; justify-content: center; padding: 18px; backdrop-filter: blur(10px); }
+    .modal.active { display: flex; }
+    .modal-card { width: 100%; max-width: 404px; border-radius: 30px; background: linear-gradient(160deg, #2c2118, #11100e); border: 1px solid rgba(214,155,72,.36); box-shadow: 0 22px 80px rgba(0,0,0,.52); padding: 22px; text-align: center; }
+    .modal-card .icon { margin: 0 auto 12px; }
+    .modal-card p { margin: 8px 0 16px; }
+    
+    .toast { position: fixed; z-index: 40; left: 50%; bottom: 102px; transform: translateX(-50%) translateY(20px); opacity: 0; pointer-events: none; width: min(360px, calc(100% - 36px)); border-radius: 18px; background: rgba(18,14,11,.96); border: 1px solid rgba(214,155,72,.28); box-shadow: 0 18px 50px rgba(0,0,0,.42); padding: 13px 15px; font-family: Verdana, Geneva, sans-serif; font-size: 12px; color: var(--cream); transition: .24s ease; text-align: center; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    
+    @media (min-width: 520px) {
+      body { padding: 22px 0; }
+      .app { min-height: 860px; border-radius: 40px; border: 1px solid rgba(246,222,184,.15); }
+      .screen { min-height: 860px; }
+    }
+  </style>
 </head>
 <body>
-
-    <div class="card-container">
-        <!-- Encabezado de la Tarjeta -->
-        <div class="card-header">
-            <h1 class="brand-title">FOGGATO CAFÉ</h1>
-            <p class="brand-subtitle">Club de Recompensas</p>
+  <main class="app">
+    <!-- Pantalla de Bienvenida/Registro -->
+    <section class="screen active" id="screen-welcome">
+      <img class="logo-hero" src="foggato-logo.jpg" alt="Foggato Café" />
+      <div class="eyebrow">Tarjeta digital de sellos</div>
+      <h1>Club Foggato</h1>
+      <p class="lead">Cada compra suma 1 sello. Junta 10 sellos y canjea tu recompensa directamente en Foggato Café.</p>
+      <div class="card">
+        <div class="card-inner">
+          <input class="field" id="name" autocomplete="name" placeholder="Nombre completo" />
+          <input class="field" id="phone" autocomplete="tel" inputmode="tel" placeholder="Teléfono (10 dígitos)" />
+          <div class="error" id="error"></div>
+          <div class="stack">
+            <button class="btn btn-primary" id="btn-register">Crear mi tarjeta</button>
+            <button class="btn btn-secondary" id="btn-login">Ya tengo tarjeta</button>
+          </div>
+          <p class="fine">Simple, rentable y fácil de explicar: 1 compra = 1 sello.</p>
         </div>
+      </div>
+      <button class="btn btn-ghost" id="btn-demo">Entrar en modo Demo</button>
+    </section>
 
-        <!-- El progreso visual -->
-        <div class="status-box">
-            <p>Llevas <span id="stamp-count">0</span> de 10 sellos</p>
-            <p id="reward-message" class="reward-alert">¡Visítanos para ganar tu primer sello!</p>
+    <!-- Pantalla Principal de la Tarjeta -->
+    <section class="screen" id="screen-home">
+      <div class="topbar">
+        <div class="brand-row">
+          <img class="logo-mini" src="foggato-logo.jpg" alt="Foggato Café" />
+          <div>
+            <strong id="member-name">Foggato Café</strong>
+            <small>Tarjeta activa</small>
+          </div>
         </div>
+        <button class="pill" id="btn-exit">Cerrar sesión</button>
+      </div>
 
-        <!-- La cuadrícula de 10 sellos -->
-        <div class="stamps-grid" id="stamps-grid">
-            <!-- Se generan con JS -->
+      <article class="hero-card">
+        <div class="hello" id="hello">Hola</div>
+        <div class="stamp-count">
+          <div class="big-number"><span id="stamp-number">0</span><small>de 10 sellos</small></div>
+          <div class="reward-badge">
+            <b id="status-title">En progreso</b>
+            <span id="status-copy">Sigue acumulando compras.</span>
+          </div>
         </div>
+        <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
+        <div class="bar-meta">
+          <span id="bar-left">0 compras registradas</span>
+          <span id="bar-right">Meta: 10</span>
+        </div>
+      </article>
 
-        <!-- Info y Reglas breves -->
-        <div class="card-footer">
-            <p><i class="fa-solid fa-circle-info"></i> Consumo mínimo por sello: $80 MXN</p>
-            <p>Válido solo en sucursal Reynosa</p>
-            <button id="simulate-btn" class="btn-primary">Simular Visita (Sumar Sello)</button>
-            <button id="reset-btn" class="btn-secondary">Reiniciar Tarjeta</button>
+      <section class="stamp-card">
+        <div class="stamp-head">
+          <h2>Mis sellos</h2>
+          <span id="remaining">Faltan 10</span>
         </div>
+        <div class="stamps" id="stamps"></div>
+      </section>
+
+      <div class="quick-actions">
+        <button class="action-card" data-tab="qr"><b>Mostrar código</b><span>Preséntalo en caja para registrar tu compra.</span></button>
+        <button class="action-card" id="btn-demo-stamp"><b>Simular compra</b><span>Agrega +1 sello para probar la experiencia.</span></button>
+      </div>
+
+      <div class="section-head"><h2>Recompensa</h2><button data-tab="rules">Ver reglas</button></div>
+      <article class="reward-card featured">
+        <div class="top">
+          <div class="icon">10</div>
+          <div>
+            <b>Al completar 10 sellos</b>
+            <span>Canjea una bebida de la casa o postre seleccionado directamente en mostrador.</span>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btn-redeem">Canjear recompensa</button>
+      </article>
+    </section>
+
+    <!-- Pantalla de Código QR / Panel de Control Virtual -->
+    <section class="screen" id="screen-qr">
+      <div class="topbar">
+        <div class="brand-row">
+          <img class="logo-mini" src="foggato-logo.jpg" alt="Foggato Café" />
+          <div>
+            <strong>Mi código</strong>
+            <small>Cliente Foggato</small>
+          </div>
+        </div>
+        <div class="pill"><span id="qr-stamps">0</span>/10 sellos</div>
+      </div>
+      <p class="lead">Muestra este código al barista para validar o acumular tus visitas en caja.</p>
+      <div class="qr-wrap">
+        <div class="qr-grid" id="qr-grid" aria-label="Código visual del cliente"></div>
+        <div class="qr-label" id="qr-label">FOG-0000</div>
+      </div>
+      <div class="code-box">
+        <small>Código de cliente</small>
+        <b id="member-code">FOG-0000</b>
+      </div>
+      
+      <div class="card" style="margin-top:20px">
+        <div class="card-inner">
+          <h3>Panel de simulación de caja</h3>
+          <p style="margin:8px 0 12px">Control del barista (En producción este módulo se conecta al sistema POS protegido).</p>
+          <div class="admin-panel">
+            <div class="admin-row">
+              <button class="btn btn-primary" id="btn-add-stamp">+1 sello</button>
+              <button class="btn btn-secondary" id="btn-remove-stamp">-1 sello</button>
+            </div>
+            <button class="btn btn-secondary" id="btn-reset-card">Reiniciar tarjeta a 0</button>
+            <p class="micro">Los sellos se guardan localmente de forma segura en el dispositivo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pantalla de Reglas del Club -->
+    <section class="screen" id="screen-rules">
+      <div class="topbar">
+        <div class="brand-row">
+          <img class="logo-mini" src="foggato-logo.jpg" alt="Foggato Café" />
+          <div>
+            <strong>Reglas del club</strong>
+            <small>Términos y condiciones</small>
+          </div>
+        </div>
+      </div>
+      <div class="section-head"><h2>Cómo funciona</h2></div>
+      <article class="rule-card"><b>1 visita válida = 1 sello</b><span>Se registra un sello por visita con consumo mínimo en sucursal, sin importar el método de pago elegido.</span></article>
+      <article class="rule-card"><b>Meta de 10 sellos</b><span>Al completar tus 10 marcas correspondientes, desbloqueas el beneficio premium vigente en Foggato Café.</span></article>
+      <article class="rule-card"><b>Canje controlado</b><span>La redención se debe validar directamente con el barista al ordenar. Al completarse, el contador regresa automáticamente a 0.</span></article>
+      <article class="rule-card"><b>Protección del programa</b><span>Las promociones y recompensas se rigen bajo disponibilidad y stock del negocio y no son acumulables con otros descuentos.</span></article>
+    </section>
+
+    <!-- Menú de Navegación Inferior -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <button class="nav-btn active" data-tab="home"><b>☕</b><span>Mi Tarjeta</span></button>
+      <button class="nav-btn" data-tab="qr"><b>▦</b><span>Código</span></button>
+      <button class="nav-btn" data-tab="rules"><b>📋</b><span>Reglas</span></button>
+    </nav>
+
+    <!-- Ventana Emergente (Modal) -->
+    <div class="modal" id="modal">
+      <div class="modal-card">
+        <div class="icon">🎉</div>
+        <h2 id="modal-title">¡Recompensa lista!</h2>
+        <p id="modal-copy">Muestra esta pantalla al barista en barra para autorizar tu cortesía.</p>
+        <button class="btn btn-primary" id="btn-confirm-redeem">Confirmar canje en caja</button>
+        <button class="btn btn-ghost" id="btn-close-modal" style="text-decoration:none">Volver a la tarjeta</button>
+      </div>
     </div>
 
-    <script>
-        // MOTOR LÓGICO DE LA TARJETA DE LEALTAD
-        const TOTAL_STAMPS = 10;
-        let currentStamps = parseInt(localStorage.getItem('foggato_stamps')) || 0;
+    <!-- Mensajes Rápidos (Toast) -->
+    <div class="toast" id="toast"></div>
+  </main>
 
-        const stampsGrid = document.getElementById('stamps-grid');
-        const stampCountText = document.getElementById('stamp-count');
-        const rewardMessage = document.getElementById('reward-message');
-        const simulateBtn = document.getElementById('simulate-btn');
-        const resetBtn = document.getElementById('reset-btn');
+  <script>
+    const STORAGE_KEY = "foggato_stamps_v2";
+    const TOTAL_STAMPS = 10;
+    const $ = (id) => document.getElementById(id);
+    
+    const screens = {
+      welcome: $("screen-welcome"),
+      home: $("screen-home"),
+      qr: $("screen-qr"),
+      rules: $("screen-rules")
+    };
+    
+    let member = loadMember();
 
-        // Renderizar la cuadrícula inicial
-        function renderGrid() {
-            stampsGrid.innerHTML = '';
-            for (let i = 1; i <= TOTAL_STAMPS; i++) {
-                const slot = document.createElement('div');
-                slot.classList.add('stamp-slot');
-                
-                // Si es el último, es el espacio del premio
-                if (i === TOTAL_STAMPS) {
-                    slot.classList.add('reward-slot');
-                }
-
-                if (i <= currentStamps) {
-                    slot.classList.add('active');
-                    if (i === TOTAL_STAMPS) {
-                        slot.innerHTML = '<i class="fa-solid fa-gift"></i>'; // Regalo activo
-                    } else {
-                        slot.innerHTML = '<i class="fa-solid fa-mug-hot"></i>'; // Taza activa
-                    }
-                } else {
-                    if (i === TOTAL_STAMPS) {
-                        slot.innerHTML = '<i class="fa-solid fa-star"></i>'; // Estrella de premio inactiva
-                    } else {
-                        slot.innerHTML = `<i class="fa-solid fa-circle" style="font-size: 8px; opacity: 0.2;"></i>`;
-                    }
-                }
-                stampsGrid.appendChild(slot);
-            }
-            
-            // Actualizar textos
-            stampCountText.innerText = currentStamps;
-            
-            if (currentStamps === 0) {
-                rewardMessage.innerText = "¡Visítanos para ganar tu primer sello!";
-                rewardMessage.style.color = "#a09884";
-            } else if (currentStamps < TOTAL_STAMPS) {
-                rewardMessage.innerText = `¡Te faltan ${TOTAL_STAMPS - currentStamps} tazas para tu bebida gratis!`;
-                rewardMessage.style.color = "#D4AF37";
-            } else {
-                rewardMessage.innerText = "¡Felicidades! Tienes un Affogato o Crepa GRATIS 🎉";
-                rewardMessage.style.color = "#4CAF50";
-            }
+    function loadMember(){
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); }
+      catch { return null; }
+    }
+    
+    function saveMember(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(member));
+    }
+    
+    function phoneDigits(value){
+      return (value || "").replace(/\D/g,"").slice(-10);
+    }
+    
+    function makeCode(phone){
+      const base = phoneDigits(phone) || String(Date.now()).slice(-6);
+      return "FOG-" + base.slice(-4);
+    }
+    
+    function showToast(text){
+      const toast = $("toast");
+      toast.textContent = text;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+    
+    function showScreen(name){
+      Object.values(screens).forEach(screen => screen.classList.remove("active"));
+      screens[name].classList.add("active");
+      
+      $("bottom-nav").classList.toggle("active", name !== "welcome");
+      
+      document.querySelectorAll(".nav-btn[data-tab]").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.tab === name);
+      });
+      if(name !== "welcome") render();
+    }
+    
+    function register(demo=false){
+      const error = $("error");
+      const nameInput = $("name").value.trim();
+      const phoneInput = phoneDigits($("phone").value);
+      
+      const name = demo ? "Cliente Foggato" : nameInput;
+      const phone = demo ? "8991234567" : phoneInput;
+      
+      if(!name || name.length < 2){
+        error.textContent = "Escribe un nombre válido.";
+        return;
+      }
+      if(!phone || phone.length < 10){
+        error.textContent = "Escribe un teléfono de 10 dígitos.";
+        return;
+      }
+      
+      member = {
+        name,
+        phone,
+        code: makeCode(phone),
+        stamps: demo ? 4 : 0,
+        totalPurchases: demo ? 4 : 0,
+        rewardsRedeemed: 0,
+        createdAt: Date.now()
+      };
+      
+      saveMember();
+      error.textContent = "";
+      showScreen("home");
+      showToast(demo ? "Demo cargada con 4 sellos iniciales." : "¡Tu tarjeta digital ha sido creada!");
+    }
+    
+    function login(){
+      const saved = loadMember();
+      if(!saved){
+        $("error").textContent = "No encontramos ninguna tarjeta activa en este equipo.";
+        return;
+      }
+      member = saved;
+      showScreen("home");
+      showToast("¡Qué gusto verte de nuevo!");
+    }
+    
+    function addStamp(){
+      if(!member) return;
+      if(member.stamps >= TOTAL_STAMPS){
+        showToast("¡Tu tarjeta ya está llena! Es hora de reclamar tu premio.");
+        return;
+      }
+      member.stamps += 1;
+      member.totalPurchases = (member.totalPurchases || 0) + 1;
+      saveMember();
+      render();
+      showToast("¡Sello registrado exitosamente! ☕");
+      if(member.stamps === TOTAL_STAMPS){
+        openModal("¡Felicidades!", "Completaste tus 10 sellos de lealtad. Presenta esta pantalla al barista para reclamar tu bebida o postre gratis.");
+      }
+    }
+    
+    function removeStamp(){
+      if(!member) return;
+      member.stamps = Math.max(0, member.stamps - 1);
+      saveMember();
+      render();
+      showToast("Se redujo 1 sello.");
+    }
+    
+    function resetCard(){
+      if(!member) return;
+      member.stamps = 0;
+      saveMember();
+      render();
+      showToast("La tarjeta volvió a ceros.");
+    }
+    
+    function redeem(){
+      if(!member) return;
+      if(member.stamps < TOTAL_STAMPS){
+        showToast("Sigue acumulando visitas para liberar la recompensa.");
+        return;
+      }
+      openModal("Validación de Premio", "Muestra esta pantalla al barista en caja. Al confirmar el movimiento, tu contador se reiniciará para tu próximo premio.");
+    }
+    
+    function confirmRedeem(){
+      if(!member) return;
+      member.stamps = 0;
+      member.rewardsRedeemed = (member.rewardsRedeemed || 0) + 1;
+      saveMember();
+      $("modal").classList.remove("active");
+      render();
+      showToast("¡Premio entregado! Tu tarjeta está lista para sumar de nuevo.");
+    }
+    
+    function openModal(title, copy){
+      $("modal-title").textContent = title;
+      $("modal-copy").textContent = copy;
+      $("modal").classList.add("active");
+    }
+    
+    function renderStamps(){
+      const wrap = $("stamps");
+      wrap.innerHTML = "";
+      for(let i=0; i<TOTAL_STAMPS; i++){
+        const div = document.createElement("div");
+        div.className = "stamp" + (i < member.stamps ? " filled" : "");
+        div.setAttribute("aria-label", i < member.stamps ? "Sello registrado" : "Sello pendiente");
+        if(i < member.stamps){
+          const position = i + 1;
+          const type = position === 5 ? "espresso" : position === 10 ? "affogato" : "coffee";
+          div.innerHTML = stampIcon(type);
         }
+        wrap.appendChild(div);
+      }
+    }
+    
+    function stampIcon(type){
+      if(type === "espresso"){
+        return `
+          <span class="stamp-icon espresso" aria-hidden="true">
+            <span class="steam s1"></span><span class="steam s2"></span><span class="steam s3"></span>
+            <span class="shot"></span>
+          </span>`;
+      }
+      if(type === "affogato"){
+        return `
+          <span class="stamp-icon affogato" aria-hidden="true">
+            <span class="scoop"></span><span class="drip"></span><span class="glass"></span>
+          </span>`;
+      }
+      return `
+        <span class="stamp-icon coffee" aria-hidden="true">
+          <span class="steam s1"></span><span class="steam s2"></span><span class="steam s3"></span>
+          <span class="cup"></span><span class="handle"></span><span class="saucer"></span>
+        </span>`;
+    }
+    
+    function renderQR(){
+      const grid = $("qr-grid");
+      grid.innerHTML = "";
+      const seed = member.code.split("").reduce((sum, ch) => sum + ch.charCodeAt(0), 0);
+      for(let y=0; y<21; y++){
+        for(let x=0; x<21; x++){
+          const cell = document.createElement("div");
+          const finder = (x<6 && y<6) || (x>14 && y<6) || (x<6 && y>14);
+          const inner = (x>1&&x<4&&y>1&&y<4) || (x>16&&x<19&&y>1&&y<4) || (x>1&&x<4&&y>16&&y<19);
+          const pattern = ((x * 13 + y * 7 + seed) % 5 === 0) || ((x + y + seed) % 9 === 0);
+          cell.className = "qr-cell" + (finder || inner || pattern ? " on" : "");
+          grid.appendChild(cell);
+        }
+      }
+      $("qr-label").textContent = member.code;
+      $("member-code").textContent = member.code;
+      $("qr-stamps").textContent = member.stamps;
+    }
+    
+    function render(){
+      if(!member) return;
+      const remaining = Math.max(0, TOTAL_STAMPS - member.stamps);
+      const progress = (member.stamps / TOTAL_STAMPS) * 100;
+      
+      $("member-name").textContent = member.name;
+      $("hello").textContent = "Hola, " + member.name.trim().split(" ")[0];
+      $("stamp-number").textContent = member.stamps;
+      $("bar-fill").style.width = progress + "%";
+      $("bar-left").textContent = member.stamps + " " + (member.stamps === 1 ? "sello sumado" : "sellos sumados");
+      $("bar-right").textContent = remaining === 0 ? "¡Completado!" : "Meta: 10";
+      $("remaining").textContent = remaining === 0 ? "¡Felicidades!" : "Faltan " + remaining + " sellos";
+      $("status-title").textContent = remaining === 0 ? "Premio listo" : "En progreso";
+      $("status-copy").textContent = remaining === 0 ? "Canjea en mostrador." : "Sigue sumando visitas.";
+      
+      renderStamps();
+      renderQR();
+    }
 
-        // Botón de Sumar Sello
-        simulateBtn.addEventListener('click', () => {
-            if (currentStamps < TOTAL_STAMPS) {
-                currentStamps++;
-                localStorage.setItem('foggato_stamps', currentStamps);
-                renderGrid();
-            } else {
-                alert("¡Ya completaste tu tarjeta! Canjea tu premio y reiníciala.");
-            }
-        });
-
-        // Botón de Reiniciar
-        resetBtn.addEventListener('click', () => {
-            if (confirm("¿Quieres limpiar la tarjeta y empezar de nuevo?")) {
-                currentStamps = 0;
-                localStorage.setItem('foggato_stamps', currentStamps);
-                renderGrid();
-            }
-        });
-
-        // Carga inicial
-        renderGrid();
-    </script>
+    $("btn-register").addEventListener("click", () => register(false));
+    $("btn-login").addEventListener("click", login);
+    $("btn-demo").addEventListener("click", () => register(true));
+    $("btn-exit").addEventListener("click", () => {
+      localStorage.removeItem(STORAGE_KEY);
+      member = null;
+      showScreen("welcome");
+      showToast("Sesión cerrada.");
+    });
+    
+    $("btn-demo-stamp").addEventListener("click", addStamp);
+    $("btn-add-stamp").addEventListener("click", addStamp);
+    $("btn-remove-stamp").addEventListener("click", removeStamp);
+    $("btn-reset-card").addEventListener("click", resetCard);
+    $("btn-redeem").addEventListener("click", redeem);
+    $("btn-confirm-redeem").addEventListener("click", confirmRedeem);
+    $("btn-close-modal").addEventListener("click", () => $("modal").classList.remove("active"));
+    
+    document.querySelectorAll("[data-tab]").forEach(el => {
+      el.addEventListener("click", () => showScreen(el.dataset.tab));
+    });
+    
+    if(member) showScreen("home");
+  </script>
 </body>
 </html>
