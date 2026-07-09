@@ -475,8 +475,11 @@
       saveMember();
       render();
       showToast("¡Sello registrado exitosamente! ☕");
+      if(member.stamps === 5){
+        openModal("¡Premio Intermedio!", "¡Llegaste al sello 5! Reclama tu dona de cortesía en barra.");
+      }
       if(member.stamps === TOTAL_STAMPS){
-        openModal("¡Felicidades!", "Completaste tus 10 sellos de lealtad. Presenta esta pantalla al barista para reclamar tu bebida o postre gratis.");
+        openModal("¡Recompensa Final!", "Completaste tus 10 sellos de lealtad. Presenta esta pantalla al barista para reclamar tu Affogato premium gratis.");
       }
     }
     
@@ -498,16 +501,27 @@
     
     function redeem(){
       if(!member) return;
-      if(member.stamps < TOTAL_STAMPS){
-        showToast("Sigue acumulando visitas para liberar la recompensa.");
+      if(member.stamps < 5){
+        showToast("Sigue acumulando visitas para liberar tus recompensas.");
         return;
       }
-      openModal("Validación de Premio", "Muestra esta pantalla al barista en caja. Al confirmar el movimiento, tu contador se reiniciará para tu próximo premio.");
+      if(member.stamps >= 5 && member.stamps < TOTAL_STAMPS){
+        openModal("Canje Intermedio", "Muestra esta pantalla para recibir tu dona gratis. Tu tarjeta continuará sumando hacia el premio final.");
+        return;
+      }
+      openModal("Validación de Premio Final", "Muestra esta pantalla al barista en caja para autorizar tu Affogato. Al confirmar, tu contador se reiniciará para tu próximo premio.");
     }
     
     function confirmRedeem(){
       if(!member) return;
-      member.stamps = 0;
+      if(member.stamps === TOTAL_STAMPS) {
+        member.stamps = 0;
+      } else {
+        // Si canjea en el 5 o después pero antes del 10, solo marcamos el beneficio entregado sin resetear el camino al 10
+        showToast("¡Dona entregada! Sigue sumando para tu Affogato.");
+        $("modal").classList.remove("active");
+        return;
+      }
       member.rewardsRedeemed = (member.rewardsRedeemed || 0) + 1;
       saveMember();
       $("modal").classList.remove("active");
@@ -530,7 +544,7 @@
         div.setAttribute("aria-label", i < member.stamps ? "Sello registrado" : "Sello pendiente");
         if(i < member.stamps){
           const position = i + 1;
-          const type = position === 5 ? "espresso" : position === 10 ? "affogato" : "coffee";
+          const type = position === 5 ? "donut" : position === 10 ? "affogato" : "coffee";
           div.innerHTML = stampIcon(type);
         }
         wrap.appendChild(div);
@@ -538,11 +552,18 @@
     }
     
     function stampIcon(type){
-      if(type === "espresso"){
+      if(type === "donut"){
         return `
-          <span class="stamp-icon espresso" aria-hidden="true">
-            <span class="steam s1"></span><span class="steam s2"></span><span class="steam s3"></span>
-            <span class="shot"></span>
+          <span class="stamp-icon donut" aria-hidden="true" style="position: relative; width: 46px; height: 46px; display: block; filter: drop-shadow(0 8px 10px rgba(0,0,0,.28));">
+            <span style="position: absolute; left: 9px; top: 9px; width: 28px; height: 28px; border-radius: 50%; background: #eac594; border: 2px solid #28170e;">
+              <span style="position: absolute; left: 2px; top: 2px; width: 20px; height: 20px; border-radius: 50%; background: #c15c3d;">
+                <span style="position: absolute; left: 6px; top: 6px; width: 8px; height: 8px; border-radius: 50%; background: #231c15; border: 2px solid #28170e;"></span>
+                <!-- Chispas -->
+                <span style="position: absolute; left: 3px; top: 4px; width: 4px; height: 2px; background: #fff; transform: rotate(30deg); border-radius: 99px;"></span>
+                <span style="position: absolute; left: 11px; top: 2px; width: 4px; height: 2px; background: #f3c778; transform: rotate(-15deg); border-radius: 99px;"></span>
+                <span style="position: absolute; left: 13px; top: 12px; width: 4px; height: 2px; background: #fff; transform: rotate(45deg); border-radius: 99px;"></span>
+              </span>
+            </span>
           </span>`;
       }
       if(type === "affogato"){
@@ -589,8 +610,17 @@
       $("bar-left").textContent = member.stamps + " " + (member.stamps === 1 ? "sello sumado" : "sellos sumados");
       $("bar-right").textContent = remaining === 0 ? "¡Completado!" : "Meta: 10";
       $("remaining").textContent = remaining === 0 ? "¡Felicidades!" : "Faltan " + remaining + " sellos";
-      $("status-title").textContent = remaining === 0 ? "Premio listo" : "En progreso";
-      $("status-copy").textContent = remaining === 0 ? "Canjea en mostrador." : "Sigue sumando visitas.";
+      
+      if(member.stamps >= TOTAL_STAMPS){
+        $("status-title").textContent = "¡Premio Final!";
+        $("status-copy").textContent = "Disfruta tu Affogato.";
+      } else if(member.stamps >= 5) {
+        $("status-title").textContent = "Dona Lista";
+        $("status-copy").textContent = "¡Rumbo al Affogato!";
+      } else {
+        $("status-title").textContent = "En progreso";
+        $("status-copy").textContent = "Sigue sumando visitas.";
+      }
       
       renderStamps();
       renderQR();
@@ -619,6 +649,6 @@
     });
     
     if(member) showScreen("home");
-  </script>
+</script>
 </body>
 </html>
