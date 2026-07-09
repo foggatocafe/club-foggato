@@ -3,168 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Club Foggato - Tarjeta de Fidelidad</title>
+    <title>Club Foggato - Tarjeta de Lealtad</title>
+    <!-- Iconos de FontAwesome para las tazas y estrellas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        /* ==========================================================================
-           1. TUS ESTILOS VISUALES (La Piel de Foggato)
-           ========================================================================== */
-        /* Copia aquí todo tu CSS: colores oscuros, fuentes, la rejilla de los sellos,
-           los modales elegantes y la navegación inferior. */
-        
-        /* Asegúrate de mantener tus diseños CSS para los sellos especiales: */
-        .stamp.special-5 { /* Tu diseño de espresso */ }
-        .stamp.special-10 { /* Tu diseño de affogato */ }
-        
-        /* 💡 MEJORA DE ACCESIBILIDAD: Ajustamos el contraste de textos finos */
-        .fine, .micro, p { color: rgba(245, 231, 208, 0.7); }
+        /* DISEÑO RÚSTICO Y ELEGANTE PARA FOGGATO CAFÉ */
+        body {
+            background-color: #121212;
+            color: #f5f2eb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-        /* 💡 ESTADO DESHABILITADO PARA EL BOTÓN DE CANJE */
-        .btn-redeem:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-            filter: grayscale(100%);
+        .card-container {
+            background-color: #1a1a1a;
+            border: 2px solid #8B5A2B; /* Tono café bronce */
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .brand-title {
+            color: #D4AF37; /* Dorado elegante */
+            font-size: 24px;
+            letter-spacing: 2px;
+            margin: 0 0 5px 0;
+        }
+
+        .brand-subtitle {
+            color: #a09884;
+            font-size: 14px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .status-box {
+            background-color: #262626;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #3d3d3d;
+        }
+
+        .status-box p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        #stamp-count {
+            color: #D4AF37;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .reward-alert {
+            color: #8B5A2B;
+            font-size: 13px;
+            font-style: italic;
+        }
+
+        /* CUADRÍCULA DE SELLOS */
+        .stamps-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .stamp-slot {
+            background-color: #262626;
+            border: 2px dashed #444;
+            border-radius: 50%;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        /* Sello cuando ya está activo (Café con logo dorado) */
+        .stamp-slot.active {
+            background-color: #8B5A2B;
+            border-style: solid;
+            border-color: #D4AF37;
+            box-shadow: 0 0 10px rgba(212,175,55,0.3);
+        }
+
+        .stamp-slot i {
+            color: #444;
+            font-size: 18px;
+        }
+
+        .stamp-slot.active i {
+            color: #D4AF37;
+            animation: popIn 0.3s ease;
+        }
+
+        /* El premio final (Espacio 10) */
+        .stamp-slot.reward-slot {
+            border-color: #D4AF37;
+        }
+        
+        .stamp-slot.reward-slot i {
+            color: #554422;
+        }
+
+        .stamp-slot.reward-slot.active i {
+            color: #fff;
+            animation: pulse 1.5s infinite;
+        }
+
+        .card-footer {
+            border-top: 1px solid #333;
+            padding-top: 15px;
+            font-size: 12px;
+            color: #a09884;
+        }
+
+        .card-footer p {
+            margin: 6px 0;
+        }
+
+        /* BOTONES */
+        .btn-primary {
+            background-color: #8B5A2B;
+            color: #f5f2eb;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background-color: #A06D3B;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #888;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary:hover {
+            color: #f5f2eb;
+            border-color: #666;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
 
-    <!-- ==========================================================================
-       2. TU ESTRUCTURA HTML (Las Pantallas)
-       ========================================================================== -->
-    
-    <!-- PANTALLA 1: BIENVENIDA -->
-    <div id="screen-welcome" class="screen">
-        <!-- Tus textos, logo de Foggato y botones de inicio -->
-        <button onclick="initApp('cliente')">Entrar como Cliente</button>
-        <button onclick="initApp('demo')" class="btn-secondary">Entrar Modo Demo</button>
-    </div>
-
-    <!-- PANTALLA 2: HOME (TARJETA DE CLIENTE) -->
-    <div id="screen-home" class="screen" style="display:none;">
-        <!-- Cabecera con saludo al cliente -->
-        <div class="user-profile">...</div>
-
-        <!-- CONTENEDOR DE SELLOS (Se llenará dinámicamente con JS) -->
-        <div id="stamps-grid" class="stamps-grid">
-            <!-- El JS meterá los 10 sellos aquí manteniendo tus clases visuales -->
+    <div class="card-container">
+        <!-- Encabezado de la Tarjeta -->
+        <div class="card-header">
+            <h1 class="brand-title">FOGGATO CAFÉ</h1>
+            <p class="brand-subtitle">Club de Recompensas</p>
         </div>
 
-        <!-- 💡 MEJORA: El botón de canje ahora tiene la ID para controlarlo con JS -->
-        <button id="btn-redeem-action" class="btn-redeem" onclick="triggerRedeem()">
-            Canjear Recompensa
-        </button>
+        <!-- El progreso visual -->
+        <div class="status-box">
+            <p>Llevas <span id="stamp-count">0</span> de 10 sellos</p>
+            <p id="reward-message" class="reward-alert">¡Visítanos para ganar tu primer sello!</p>
+        </div>
+
+        <!-- La cuadrícula de 10 sellos -->
+        <div class="stamps-grid" id="stamps-grid">
+            <!-- Se generan con JS -->
+        </div>
+
+        <!-- Info y Reglas breves -->
+        <div class="card-footer">
+            <p><i class="fa-solid fa-circle-info"></i> Consumo mínimo por sello: $80 MXN</p>
+            <p>Válido solo en sucursal Reynosa</p>
+            <button id="simulate-btn" class="btn-primary">Simular Visita (Sumar Sello)</button>
+            <button id="reset-btn" class="btn-secondary">Reiniciar Tarjeta</button>
+        </div>
     </div>
 
-    <!-- PANTALLA 3: CÁMARA / QR (Para acumular) -->
-    <div id="screen-qr" class="screen" style="display:none;">
-        <!-- Tu interfaz de escaneo o el QR generado para la caja -->
-    </div>
-
-    <!-- NAVEGACIÓN INFERIOR -->
-    <nav class="bottom-nav" style="display:none;">
-        <button onclick="switchScreen('home')">Inicio</button>
-        <button onclick="switchScreen('qr')">Acumular</button>
-        <!-- 💡 MEJORA: El botón Demo sólo aparece si se inició en modo demo -->
-        <button id="nav-demo-hook" onclick="addDemoStamp()" style="display:none;">+ Sello Demo</button>
-    </nav>
-
-
-    <!-- ==========================================================================
-       3. EL MOTOR LÓGICO (JavaScript Unificado)
-       ========================================================================== -->
     <script>
-        // CONFIGURACIÓN GLOBAL
+        // MOTOR LÓGICO DE LA TARJETA DE LEALTAD
         const TOTAL_STAMPS = 10;
-        
-        // ESTADO DE LA APP (El "cerebro" que controla todo)
-        let appState = {
-            isDemoMode: false,
-            currentStamps: 0,
-            currentScreen: 'welcome'
-        };
+        let currentStamps = parseInt(localStorage.getItem('foggato_stamps')) || 0;
 
-        // 1. CONTROL DE NAVEGACIÓN
-        function switchScreen(screenId) {
-            // Oculta todas las pantallas
-            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
-            // Muestra la seleccionada
-            document.getElementById(`screen-${screenId}`).style.display = 'block';
-            appState.currentScreen = screenId;
-        }
+        const stampsGrid = document.getElementById('stamps-grid');
+        const stampCountText = document.getElementById('stamp-count');
+        const rewardMessage = document.getElementById('reward-message');
+        const simulateBtn = document.getElementById('simulate-btn');
+        const resetBtn = document.getElementById('reset-btn');
 
-        // 2. INICIALIZACIÓN DE LA APP
-        function initApp(mode) {
-            appState.isDemoMode = (mode === 'demo');
-            appState.currentStamps = 0; // Inicia limpia
-
-            // Control visual del botón demo en el menú inferior
-            const demoBtn = document.getElementById('nav-demo-hook');
-            demoBtn.style.display = appState.isDemoMode ? 'block' : 'none';
-
-            // Mostrar el menú de navegación general
-            document.querySelector('.bottom-nav').style.display = 'flex';
-
-            // Renderizar la tarjeta por primera vez y saltar al home
-            renderCard();
-            switchScreen('home');
-        }
-
-        // 3. RENDERIZADO DINÁMICO (Aquí ocurre la magia visual)
-        function renderCard() {
-            const grid = document.getElementById('stamps-grid');
-            grid.innerHTML = ''; // Limpiamos la rejilla vieja
-
+        // Renderizar la cuadrícula inicial
+        function renderGrid() {
+            stampsGrid.innerHTML = '';
             for (let i = 1; i <= TOTAL_STAMPS; i++) {
-                const stamp = document.createElement('div');
+                const slot = document.createElement('div');
+                slot.classList.add('stamp-slot');
                 
-                // Asignamos la clase base de tus sellos
-                stamp.classList.add('stamp');
-
-                // Aplicamos tus estilos especiales de iconos CSS para los hitos 5 y 10
-                if (i === 5) stamp.classList.add('special-5');
-                if (i === 10) stamp.classList.add('special-10');
-
-                // Si el cliente ya se ganó este sello, le clavamos la clase 'active'
-                if (i <= appState.currentStamps) {
-                    stamp.classList.add('active');
+                // Si es el último, es el espacio del premio
+                if (i === TOTAL_STAMPS) {
+                    slot.classList.add('reward-slot');
                 }
 
-                grid.appendChild(stamp);
+                if (i <= currentStamps) {
+                    slot.classList.add('active');
+                    if (i === TOTAL_STAMPS) {
+                        slot.innerHTML = '<i class="fa-solid fa-gift"></i>'; // Regalo activo
+                    } else {
+                        slot.innerHTML = '<i class="fa-solid fa-mug-hot"></i>'; // Taza activa
+                    }
+                } else {
+                    if (i === TOTAL_STAMPS) {
+                        slot.innerHTML = '<i class="fa-solid fa-star"></i>'; // Estrella de premio inactiva
+                    } else {
+                        slot.innerHTML = `<i class="fa-solid fa-circle" style="font-size: 8px; opacity: 0.2;"></i>`;
+                    }
+                }
+                stampsGrid.appendChild(slot);
             }
-
-            // ACTUADORES: Bloqueo/Desbloqueo del botón de canje
-            const redeemBtn = document.getElementById('btn-redeem-action');
-            if (appState.currentStamps === TOTAL_STAMPS) {
-                redeemBtn.disabled = false;
-                redeemBtn.innerText = "¡Recompensa Lista! Canjear";
+            
+            // Actualizar textos
+            stampCountText.innerText = currentStamps;
+            
+            if (currentStamps === 0) {
+                rewardMessage.innerText = "¡Visítanos para ganar tu primer sello!";
+                rewardMessage.style.color = "#a09884";
+            } else if (currentStamps < TOTAL_STAMPS) {
+                rewardMessage.innerText = `¡Te faltan ${TOTAL_STAMPS - currentStamps} tazas para tu bebida gratis!`;
+                rewardMessage.style.color = "#D4AF37";
             } else {
-                redeemBtn.disabled = true;
-                redeemBtn.innerText = `Faltan ${TOTAL_STAMPS - appState.currentStamps} cafés para tu Affogato`;
+                rewardMessage.innerText = "¡Felicidades! Tienes un Affogato o Crepa GRATIS 🎉";
+                rewardMessage.style.color = "#4CAF50";
             }
         }
 
-        // 4. ACCIONES (Sumar y Canjear)
-        function addDemoStamp() {
-            if (appState.currentStamps < TOTAL_STAMPS) {
-                appState.currentStamps++;
-                renderCard(); // Redibujamos los sellos activos
-                
-                if(appState.currentStamps === TOTAL_STAMPS) {
-                    alert("¡Felicidades! Completaste tu tarjeta. Ya puedes disfrutar tu Affogato de cortesía.");
-                }
+        // Botón de Sumar Sello
+        simulateBtn.addEventListener('click', () => {
+            if (currentStamps < TOTAL_STAMPS) {
+                currentStamps++;
+                localStorage.setItem('foggato_stamps', currentStamps);
+                renderGrid();
+            } else {
+                alert("¡Ya completaste tu tarjeta! Canjea tu premio y reiníciala.");
             }
-        }
+        });
 
-        function triggerRedeem() {
-            if (appState.currentStamps === TOTAL_STAMPS) {
-                // Aquí metes la animación de éxito que hiciste o el modal de confirmación
-                alert("¡Disfruta tu Affogato rústico en Foggato Café! Reiniciando tarjeta...");
-                
-                // Al confirmar, reiniciamos el contador a 0
-                appState.currentStamps = 0;
-                renderCard();
+        // Botón de Reiniciar
+        resetBtn.addEventListener('click', () => {
+            if (confirm("¿Quieres limpiar la tarjeta y empezar de nuevo?")) {
+                currentStamps = 0;
+                localStorage.setItem('foggato_stamps', currentStamps);
+                renderGrid();
             }
-        }
+        });
+
+        // Carga inicial
+        renderGrid();
     </script>
 </body>
 </html>
